@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronologia — Irma Brandeis & Eugenio Montale</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f7f3ec;
+  --ink: #1c1a16;
+  --ink-soft: #4a4640;
+  --ink-muted: #9a9590;
+  --gold: #b89a5a;
+  --gold-light: #e8d9b5;
+  --blue: #2c4a6e;
+  --purple: #534AB7;
+  --coral: #993C1D;
+  --green: #3B6D11;
+  --gray: #5F5E5A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.page-header {
+  border-bottom: 1px solid var(--gold-light);
+  padding: 3rem 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border: 1px solid var(--gold-light);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; right: 60px;
+  width: 120px; height: 120px;
+  border: 1px solid var(--gold-light);
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-top: 0.75rem;
+}
+
+.tei-ref {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 1.5rem;
+  padding: 8px 12px;
+  border-left: 2px solid var(--gold-light);
+  display: inline-block;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: calc(100vh - 180px);
+}
+
+.sidebar {
+  border-right: 1px solid var(--gold-light);
+  padding: 2rem 1.5rem;
+  position: sticky;
+  top: 0;
+  height: fit-content;
+}
+
+.sidebar-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity 0.2s;
+}
+
+.legend-item:hover { opacity: 0.7; }
+
+.legend-item.inactive { opacity: 0.3; }
+
+.leg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  flex-shrink: 0;
+}
+
+.legend-item span {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.filter-all {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  cursor: pointer;
+  margin-top: 1rem;
+  text-decoration: underline;
+  letter-spacing: 0.1em;
+}
+
+.content {
+  padding: 2rem 3rem;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--gold-light) 5%, var(--gold-light) 95%, transparent);
+}
+
+.tl-event {
+  position: relative;
+  margin-bottom: 0;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.tl-event.hidden { display: none; }
+
+.tl-dot-wrap {
+  position: absolute;
+  left: -2rem;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tl-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  background: var(--cream);
+}
+
+.tl-event:hover .tl-dot,
+.tl-event.active .tl-dot {
+  transform: scale(1.4);
+}
+
+.type-incontro .tl-dot { border-color: #185FA5; }
+.type-incontro.active .tl-dot { background: #E6F1FB; box-shadow: 0 0 0 3px #E6F1FB; }
+.type-lettera .tl-dot { border-color: var(--purple); }
+.type-lettera.active .tl-dot { background: #EEEDFE; box-shadow: 0 0 0 3px #EEEDFE; }
+.type-storico .tl-dot { border-color: var(--coral); }
+.type-storico.active .tl-dot { background: #FAECE7; box-shadow: 0 0 0 3px #FAECE7; }
+.type-poetico .tl-dot { border-color: var(--green); }
+.type-poetico.active .tl-dot { background: #EAF3DE; box-shadow: 0 0 0 3px #EAF3DE; }
+.type-morte .tl-dot { border-color: var(--gray); }
+.type-morte.active .tl-dot { background: #F1EFE8; box-shadow: 0 0 0 3px #F1EFE8; }
+
+.tl-inner {
+  padding: 1.25rem 0 1.25rem 0.5rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.tl-event:hover .tl-inner { border-color: var(--gold-light); }
+.tl-event.active .tl-inner { border-color: var(--gold-light); }
+
+.tl-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.tl-label {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.tl-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+.tag-incontro { background: #E6F1FB; color: #0C447C; }
+.tag-lettera { background: #EEEDFE; color: #3C3489; }
+.tag-storico { background: #FAECE7; color: #712B13; }
+.tag-poetico { background: #EAF3DE; color: #27500A; }
+.tag-morte { background: #F1EFE8; color: #444441; }
+
+.tl-desc {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-top: 0.75rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s;
+  opacity: 0;
+}
+
+.tl-event.active .tl-desc {
+  max-height: 300px;
+  opacity: 1;
+}
+
+.tl-tei-block {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  background: white;
+  border: 1px solid var(--gold-light);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin-top: 10px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s;
+  opacity: 0;
+}
+
+.tl-event.active .tl-tei-block {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.tei-label {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+  .main { grid-template-columns: 1fr; }
+  .sidebar { position: static; border-right: none; border-bottom: 1px solid var(--gold-light); }
+  .page-header { padding: 2rem 1.5rem 1.5rem; }
+  .content { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <p class="eyebrow">Edizione digitale — Università degli Studi di Salerno, 2025</p>
+  <h1>Irma Brandeis<br><em>& Eugenio Montale</em></h1>
+  <p class="subtitle">Cronologia dei <em>Passi diaristici ed epistolari</em></p>
+  <div class="tei-ref">fonte TEI: &lt;listEvent&gt; — passi_diaristici_epistolari.xml</div>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <p class="sidebar-label">Legenda</p>
+    <div class="legend-item" data-type="incontro" onclick="filterType('incontro', this)">
+      <div class="leg-dot" style="border-color:#185FA5;background:#E6F1FB"></div>
+      <span>Incontri</span>
+    </div>
+    <div class="legend-item" data-type="lettera" onclick="filterType('lettera', this)">
+      <div class="leg-dot" style="border-color:#534AB7;background:#EEEDFE"></div>
+      <span>Lettere / diari</span>
+    </div>
+    <div class="legend-item" data-type="poetico" onclick="filterType('poetico', this)">
+      <div class="leg-dot" style="border-color:#3B6D11;background:#EAF3DE"></div>
+      <span>Opere</span>
+    </div>
+    <div class="legend-item" data-type="storico" onclick="filterType('storico', this)">
+      <div class="leg-dot" style="border-color:#993C1D;background:#FAECE7"></div>
+      <span>Contesto storico</span>
+    </div>
+    <div class="legend-item" data-type="morte" onclick="filterType('morte', this)">
+      <div class="leg-dot" style="border-color:#5F5E5A;background:#F1EFE8"></div>
+      <span>Morte</span>
+    </div>
+    <p class="filter-all" onclick="showAll()">mostra tutti</p>
+  </aside>
+
+  <main class="content">
+    <div class="timeline">
+
+      <div class="tl-event type-storico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1905</div>
+          <div class="tl-label">Nascita di Irma Brandeis</div>
+          <span class="tl-tag tag-storico">contesto storico</span>
+          <div class="tl-desc">Irma Brandeis nasce a New York da una famiglia ebraica di origine austro-boema. Si formerà alla Columbia University e al Radcliffe College, dedicando la sua vita allo studio della Commedia dantesca.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;event xml:id="e_nascita" when="1905"&gt;<br>&nbsp;&nbsp;&lt;label&gt;Nascita di Irma Brandeis&lt;/label&gt;<br>&lt;/event&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-storico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1929</div>
+          <div class="tl-label">Montale direttore del Vieusseux</div>
+          <span class="tl-tag tag-storico">contesto storico</span>
+          <div class="tl-desc">Eugenio Montale viene nominato direttore del Gabinetto Scientifico Letterario G.P. Vieusseux di Firenze, ruolo che manterrà fino al 1938, quando verrà destituito per non aver aderito al Partito Fascista.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;org xml:id="vieusseux"&gt;<br>&nbsp;&nbsp;&lt;orgName&gt;Gabinetto Vieusseux&lt;/orgName&gt;<br>&nbsp;&nbsp;&lt;note&gt;Montale direttore 1929–1938&lt;/note&gt;<br>&lt;/org&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-incontro" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">estate 1933</div>
+          <div class="tl-label">Primo incontro al Vieusseux</div>
+          <span class="tl-tag tag-incontro">incontro</span>
+          <div class="tl-desc">Irma si reca al Vieusseux chiedendo di Montale, di cui aveva letto con ammirazione gli Ossi di seppia. L'impiegato la introduce al direttore il giorno seguente. Inizia una frequentazione quotidiana: incontri al caffè Doney, passeggiate lungo il fiume, conversazioni su Pound, Eliot, l'America.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;event xml:id="e_incontro" when="1933"&gt;<br>&nbsp;&nbsp;&lt;label&gt;Primo incontro al Vieusseux&lt;/label&gt;<br>&lt;/event&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-lettera" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">20 luglio 1933</div>
+          <div class="tl-label">Lettera a Gino Bigongiari</div>
+          <span class="tl-tag tag-lettera">lettera</span>
+          <div class="tl-desc">«C'è una sola, necessaria precisazione da fare: sono ridicolmente felice.» Irma scrive all'amico Bigongiari descrivendo l'incontro con Montale e la sua vita fiorentina tra biblioteca e letture.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;div type="letter" n="1"&gt;<br>&nbsp;&nbsp;&lt;dateline&gt;Firenze,<br>&nbsp;&nbsp;&lt;date when="1933-07-20"/&gt;&lt;/dateline&gt;<br>&lt;/div&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-lettera" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">2 agosto 1933</div>
+          <div class="tl-label">Seconda lettera a Bigongiari</div>
+          <span class="tl-tag tag-lettera">lettera</span>
+          <div class="tl-desc">Montale è partito per Londra. Irma lo descrive: «molto gentile, davvero semplice, alquanto brutto». Confessa di trovare meravigliosa la sua poesia. Non sa ancora che Montale è partito con Drusilla Tanzi.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;div type="letter" n="2"&gt;<br>&nbsp;&nbsp;&lt;dateline&gt;Firenze,<br>&nbsp;&nbsp;&lt;date when="1933-08-02"/&gt;&lt;/dateline&gt;<br>&lt;/div&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-storico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1938</div>
+          <div class="tl-label">Irma lascia l'Italia</div>
+          <span class="tl-tag tag-storico">contesto storico</span>
+          <div class="tl-desc">Le leggi razziali fasciste rendono impossibile la permanenza di Irma come studiosa ebrea americana. È lei a tagliare definitivamente il filo che li legava, come dirà poi a Jean Cook con «rammarico, rimorso e sgomento».</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;note&gt;La separazione avvenne quando Brandeis<br>lasciò l'Italia nel 1938 per le leggi razziali<br>fasciste.&lt;/note&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-poetico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1939</div>
+          <div class="tl-label">Pubblicazione de <em>Le Occasioni</em></div>
+          <span class="tl-tag tag-poetico">opera poetica</span>
+          <div class="tl-desc">Montale pubblica Le Occasioni, dedicata a Irma trasfigurata col nome di Clizia — figura della tradizione ovidiana, il girasole che volge lo sguardo verso il sole divino. È il culmine poetico del loro legame.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;persName type="pseudonym"&gt;Clizia&lt;/persName&gt;<br>&lt;note&gt;dedicataria de Le Occasioni (1939)&lt;/note&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-poetico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1960</div>
+          <div class="tl-label">Irma pubblica <em>The Ladder of Vision</em></div>
+          <span class="tl-tag tag-poetico">opera accademica</span>
+          <div class="tl-desc">Culmine degli anni di studi danteschi, il volume analizza l'imagery nella Commedia. Irma era ritirata al Bard College di Annandale-on-Hudson, dove continuò a costruire la propria voce critica e intellettuale.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;note&gt;The Ladder of Vision (1960),<br>culmine degli studi danteschi.&lt;/note&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-poetico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1971</div>
+          <div class="tl-label">Montale pubblica <em>Satura</em></div>
+          <span class="tl-tag tag-poetico">opera poetica</span>
+          <div class="tl-desc">Montale dedica Satura a Drusilla Tanzi, trasfigurata col nome di Xenia. Irma: «Xenia ottiene ciò che desidera: incolpandomi, insultandomi, riconquistando favore».</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;persName type="pseudonym"&gt;Xenia&lt;/persName&gt;<br>&lt;note&gt;Drusilla Tanzi in Satura (1971)&lt;/note&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-storico" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1975</div>
+          <div class="tl-label">Montale: Premio Nobel per la letteratura</div>
+          <span class="tl-tag tag-storico">contesto storico</span>
+          <div class="tl-desc">Eugenio Montale riceve il Premio Nobel per la letteratura, riconoscimento del suo ruolo centrale nella poesia italiana del Novecento.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;note&gt;Poeta italiano, premio Nobel<br>per la letteratura nel 1975.&lt;/note&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-lettera" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">1980</div>
+          <div class="tl-label">Annotazioni sul nome Clizia</div>
+          <span class="tl-tag tag-lettera">diario</span>
+          <div class="tl-desc">«Sono stanca di sentirmi chiedere che sono colei che è chiamata Clizia.» Irma, anziana, rifiuta l'identificazione con il personaggio poetico di Montale e rivendica la propria soggettività autonoma.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;div type="letter" n="3"&gt;<br>&nbsp;&nbsp;&lt;dateline&gt;&lt;date when="1980"/&gt;&lt;/dateline&gt;<br>&lt;/div&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-lettera" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">giugno 1981</div>
+          <div class="tl-label">Ultimo biglietto di Montale</div>
+          <span class="tl-tag tag-lettera">lettera</span>
+          <div class="tl-desc">Montale le spedisce una copia della sua Opera in versi: «Irma, sei ancora la mia dea, la mia divinità. Quando, come ci rincontreremo?» Irma stava pianificando un viaggio in Italia per rivederlo.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;div type="poem"&gt;<br>&nbsp;&nbsp;&lt;l&gt;Irma, sei ancora la mia dea,&lt;/l&gt;<br>&nbsp;&nbsp;&lt;l&gt;la mia divinità.&lt;/l&gt;<br>&lt;/div&gt;</div>
+        </div>
+      </div>
+
+      <div class="tl-event type-morte" onclick="toggle(this)">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+        <div class="tl-inner">
+          <div class="tl-date">13 settembre 1981</div>
+          <div class="tl-label">Morte di Montale</div>
+          <span class="tl-tag tag-morte">morte</span>
+          <div class="tl-desc">«Telefonata da Glauco C. Montale è morto.» Una prosa asciutta, quasi clinica, che lascia trapelare tra una frase e l'altra la misura esatta di tutto ciò che era stato e non aveva potuto essere.</div>
+          <div class="tl-tei-block"><div class="tei-label">riferimento TEI</div>&lt;div type="letter" n="4"&gt;<br>&nbsp;&nbsp;&lt;dateline&gt;&lt;date when="1981-09-13"/&gt;&lt;/dateline&gt;<br>&nbsp;&nbsp;&lt;p&gt;Montale è morto.&lt;/p&gt;<br>&lt;/div&gt;</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+function toggle(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.tl-event').forEach(e => e.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+let activeFilter = null;
+
+function filterType(type, item) {
+  if (activeFilter === type) {
+    showAll();
+    return;
+  }
+  activeFilter = type;
+  document.querySelectorAll('.legend-item').forEach(l => l.classList.add('inactive'));
+  item.classList.remove('inactive');
+  document.querySelectorAll('.tl-event').forEach(ev => {
+    if (ev.classList.contains('type-' + type)) {
+      ev.classList.remove('hidden');
+    } else {
+      ev.classList.add('hidden');
+      ev.classList.remove('active');
+    }
+  });
+}
+
+function showAll() {
+  activeFilter = null;
+  document.querySelectorAll('.legend-item').forEach(l => l.classList.remove('inactive'));
+  document.querySelectorAll('.tl-event').forEach(ev => ev.classList.remove('hidden'));
+}
+</script>
+</body>
+</html>
