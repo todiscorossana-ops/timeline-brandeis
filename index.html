@@ -1,241 +1,292 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline Montale-Brandeis</title>
-    <style>
-        :root {
-            --biografico: #e74c3c;
-            --letterario: #2ecc71;
-            --accademico: #3498db;
-            --documenti: #f1c40f;
-            --bg-color: #f4f7f6;
-            --text-color: #2c3e50;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timeline Montale – Brandeis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #f5f1ea;
+      color: #1e1e1e;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #c8b79f;
+      transform: translateX(-50%);
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    .timeline-item {
+      position: relative;
+      width: 50%;
+      padding: 2rem;
+    }
 
-        /* Filtri */
-        .filters {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    .timeline-item.left {
+      left: 0;
+      text-align: right;
+    }
 
-        .filter-btn {
-            background: #fff;
-            border: 2px solid #ddd;
-            padding: 8px 15px;
-            margin: 5px;
-            cursor: pointer;
-            border-radius: 20px;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
+    .timeline-item.right {
+      left: 50%;
+      text-align: left;
+    }
 
-        .filter-btn:hover, .filter-btn.active {
-            background: #2c3e50;
-            color: #fff;
-            border-color: #2c3e50;
-        }
+    .timeline-dot {
+      position: absolute;
+      top: 2.5rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      background: #8b5e3c;
+      border: 4px solid #f5f1ea;
+      z-index: 10;
+    }
 
-        /* Timeline Container */
-        .timeline {
-            position: relative;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px 0;
-        }
+    .timeline-item.left .timeline-dot {
+      right: -9px;
+    }
 
-        /* Linea centrale */
-        .timeline::after {
-            content: '';
-            position: absolute;
-            width: 4px;
-            background-color: #ddd;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -2px;
-        }
+    .timeline-item.right .timeline-dot {
+      left: -9px;
+    }
 
-        /* Event Container */
-        .event-container {
-            padding: 10px 40px;
-            position: relative;
-            width: 50%;
-            box-sizing: border-box;
-            opacity: 1;
-            transition: all 0.4s ease;
-        }
+    .card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border-top: 6px solid;
+    }
 
-        .event-container.hide {
-            display: none;
-        }
+    /* Mapping dei tipi dell'XML ai colori */
+    .Biografico, .biografico { border-color: #8b5e3c; }
+    .Letterario, .letterario { border-color: #b91c1c; }
+    .Accademico, .accademico { border-color: #1d4ed8; }
+    .Documenti, .documenti { border-color: #9333ea; }
 
-        /* Alternanza destra/sinistra */
-        .left { left: 0; text-align: right; }
-        .right { left: 50%; text-align: left; }
+    .date {
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+    }
 
-        /* Cerchietti sulla linea */
-        .event-container::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            right: -10px;
-            background-color: white;
-            border: 4px solid var(--biografico);
-            top: 25px;
-            border-radius: 50%;
-            z-index: 1;
-        }
+    .title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
 
-        .right::after { left: -10px; }
+    .type-label {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      background: #eee;
+    }
 
-        /* Card dell'evento */
-        .content {
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: relative;
-        }
+    @media (max-width: 768px) {
+      .timeline-line {
+        left: 20px;
+      }
 
-        .date {
-            font-weight: bold;
-            color: #7f8c8d;
-            display: block;
-            margin-bottom: 5px;
-        }
+      .timeline-item,
+      .timeline-item.left,
+      .timeline-item.right {
+        width: 100%;
+        left: 0;
+        text-align: left;
+        padding-left: 4rem;
+        padding-right: 1rem;
+      }
 
-        h3 {
-            margin-top: 0;
-            color: #333;
-            font-size: 1.2rem;
-        }
-
-        .tag {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 4px;
-            color: white;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        /* Colori Categorie */
-        .type-biografico .tag, .type-biografico::after { border-color: var(--biografico); background-color: var(--biografico); }
-        .type-letterario .tag, .type-letterario::after { border-color: var(--letterario); background-color: var(--letterario); }
-        .type-accademico .tag, .type-accademico::after { border-color: var(--accademico); background-color: var(--accademico); }
-        .type-documenti .tag, .type-documenti::after { border-color: var(--documenti); background-color: var(--documenti); color: #333; }
-
-        /* Responsive */
-        @media screen and (max-width: 600px) {
-            .timeline::after { left: 31px; }
-            .event-container { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left !important; }
-            .event-container::after { left: 21px; right: auto; }
-            .right { left: 0%; }
-        }
-    </style>
+      .timeline-item.left .timeline-dot,
+      .timeline-item.right .timeline-dot {
+        left: 11px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Eugenio Montale & Irma Brandeis</h1>
-    <p>Una storia d'amore, poesia e letteratura</p>
-</header>
+  <header class="py-16 px-6 text-center max-w-4xl mx-auto">
+    <h1 class="text-5xl font-bold mb-6">Eugenio Montale & Irma Brandeis</h1>
+    <p class="text-lg text-gray-700 leading-relaxed">
+      Timeline aggiornata basata sui documenti d'archivio e le pubblicazioni letterarie.
+    </p>
+  </header>
 
-<div class="filters">
-    <button class="filter-btn active" onclick="filterEvents('all')">Tutti</button>
-    <button class="filter-btn" onclick="filterEvents('biografico')">Biografico</button>
-    <button class="filter-btn" onclick="filterEvents('letterario')">Letterario</button>
-    <button class="filter-btn" onclick="filterEvents('accademico')">Accademico</button>
-    <button class="filter-btn" onclick="filterEvents('documenti')">Documenti</button>
-</div>
+  <main class="relative max-w-6xl mx-auto pb-24">
+    <div class="timeline-line"></div>
+    <div id="timeline"></div>
+  </main>
 
-<div class="timeline" id="timeline">
-    <!-- Gli eventi verranno inseriti qui dal JS -->
-</div>
+  <script>
+    // Stringa XML aggiornata con i tuoi nuovi dati
+    const xmlString = `
+<listEvent>
+    <event type="Biografico">
+      <head>Nascita di Eugenio Montale</head>
+      <date when="1896-10-12">12 ottobre 1896</date>
+      <p>Eugenio Montale nasce a Genova il 12 ottobre 1896.</p>
+    </event>
 
-<script>
-    const events = [
-        { date: "12 ottobre 1896", year: 1896, type: "biografico", title: "Nascita di Eugenio Montale", text: "Eugenio Montale nasce a Genova." },
-        { date: "1905", year: 1905, type: "biografico", title: "Nascita di Irma Brandeis", text: "Nasce a New York da una famiglia ebraica di origine austro-boema." },
-        { date: "15 giugno 1925", year: 1925, type: "letterario", title: "Pubblicazione degli Ossi di seppia", text: "Prima raccolta poetica di Montale. È il libro che Brandeis cita come ragione del suo avvicinamento al poeta." },
-        { date: "1929", year: 1929, type: "accademico", title: "Montale direttore del Vieusseux", text: "Viene nominato direttore del Gabinetto Vieusseux di Firenze." },
-        { date: "1931", year: 1931, type: "biografico", title: "Primo soggiorno fiorentino di Irma", text: "Irma viene a Firenze per studi danteschi." },
-        { date: "1933", year: 1933, type: "biografico", title: "Primo incontro al Vieusseux", text: "Irma chiede di conoscere il direttore. Inizia una frequentazione quotidiana fatta di passeggiate e conversazioni." },
-        { date: "20 luglio 1933", year: 1933, type: "documenti", title: "Lettera a Gino Bigongiari", text: "«C'è una sola, necessaria precisazione da fare: sono ridicolmente felice.»" },
-        { date: "Agosto 1933", year: 1933, type: "biografico", title: "Montale a Londra con Mosca", text: "Montale soggiorna a Londra con Drusilla Tanzi (Mosca). Irma non ne conosce ancora l'esistenza." },
-        { date: "1933", year: 1933, type: "documenti", title: "Irma descrive Montale", text: "Lo definisce «molto gentile, davvero semplice, alquanto brutto», ma adora la sua poesia." },
-        { date: "1938", year: 1938, type: "biografico", title: "Irma lascia l'Italia", text: "Le leggi razziali fasciste rendono impossibile la sua permanenza. Si recide il legame fisico." },
-        { date: "1939", year: 1939, type: "letterario", title: "Pubblicazione de Le Occasioni", text: "Il libro è dedicato a Irma, trasfigurata nel mito di Clizia." },
-        { date: "1960", year: 1960, type: "letterario", title: "The Ladder of Vision", text: "Irma pubblica il suo culmine di studi danteschi presso il Bard College." },
-        { date: "1963", year: 1963, type: "biografico", title: "Morte di Drusilla Tanzi", text: "Muore la moglie di Montale, la 'Mosca', poi celebrata in Xenia." },
-        { date: "1965", year: 1965, type: "accademico", title: "Montale cita Irma", text: "In un'esposizione loda l'opera di Irma come guida fondamentale per Dante." },
-        { date: "1971", year: 1971, type: "letterario", title: "Pubblicazione di Satura", text: "Montale pubblica la raccolta dedicata a Xenia. Irma annota con amarezza il favore riconquistato dalla rivale." },
-        { date: "1975", year: 1975, type: "accademico", title: "Premio Nobel a Montale", text: "Riconoscimento mondiale per il poeta." },
-        { date: "1980", year: 1980, type: "documenti", title: "Annotazioni su Clizia", text: "Irma rivendica la sua identità: «Sono stanca di sentirmi chiedere che sono colei che è chiamata Clizia.»" },
-        { date: "1981", year: 1981, type: "documenti", title: "Ultimo biglietto di Montale", text: "«Irma, sei ancora la mia dea... Quando ci rincontreremo?»" },
-        { date: "12 settembre 1981", year: 1981, type: "biografico", title: "Morte di Eugenio Montale", text: "Una telefonata annuncia la fine. Irma stava pianificando un viaggio per vederlo." },
-        { date: "1990", year: 1990, type: "biografico", title: "Morte di Irma Brandeis", text: "Muore ad Annandale-on-Hudson dopo decenni di insegnamento." }
-    ];
+    <event type="Biografico">
+      <head>Nascita di Irma Brandeis</head>
+      <date when="1905">1905</date>
+      <p>Irma Brandeis nasce a New York da una famiglia ebraica di origine austro-boema.</p>
+    </event>
 
-    function renderTimeline() {
-        const container = document.getElementById('timeline');
-        container.innerHTML = '';
+    <event type="Letterario">
+      <head>Pubblicazione degli Ossi di seppia</head>
+      <date when="1925-06-15">15 giugno 1925</date>
+      <p>Prima raccolta poetica di Montale, pubblicata da Gobetti. È il libro che Brandeis cita come ragione del suo avvicinamento al poeta.</p>
+    </event>
 
-        events.forEach((event, index) => {
-            const side = index % 2 === 0 ? 'left' : 'right';
-            const html = `
-                <div class="event-container ${side} type-${event.type}" data-type="${event.type}">
-                    <div class="content">
-                        <span class="tag">${event.type}</span>
-                        <span class="date">${event.date}</span>
-                        <h3>${event.title}</h3>
-                        <p>${event.text}</p>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += html;
-        });
-    }
+    <event type="Accademico">
+      <head>Montale direttore del Vieusseux</head>
+      <date when="1929">1929</date>
+      <p>Viene nominato direttore del Gabinetto Vieusseux di Firenze, ruolo che manterrà fino al 1938, quando verrà destituito per non aver aderito al Partito Fascista.</p>
+    </event>
 
-    function filterEvents(type) {
-        // Aggiorna bottoni
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if(btn.innerText.toLowerCase() === type) btn.classList.add('active');
-            if(type === 'all' && btn.innerText === 'Tutti') btn.classList.add('active');
-        });
+    <event type="biografico">
+      <head>Primo soggiorno fiorentino di Irma Brandeis</head>
+      <date when="1931">1931</date>
+      <p>Irma viene a Firenze per la prima volta con l'intenzione di scrivere un libro sui suoi studi danteschi.</p>
+    </event>
 
-        // Filtra elementi
-        const items = document.querySelectorAll('.event-container');
-        items.forEach(item => {
-            if (type === 'all' || item.getAttribute('data-type') === type) {
-                item.classList.remove('hide');
-            } else {
-                item.classList.add('hide');
-            }
-        });
-    }
+    <event type="Biografico">
+      <head>Primo incontro al Vieusseux</head>
+      <date when="1933">1933</date>
+      <p>Irma si reca al Vieusseux chiedendo di Montale. Inizia una frequentazione quotidiana tra caffè e passeggiate lungo il fiume.</p>
+    </event>
 
-    renderTimeline();
-</script>
+    <event type="Documenti">
+      <head>Lettera a Gino Bigongiari</head>
+      <date when="1933-07-20">20 luglio 1933</date>
+      <p>Irma scrive: «C'è una sola, necessaria precisazione da fare: sono ridicolmente felice.»</p>
+    </event>
+
+    <event type="biografico">
+      <head>Montale parte per Londra con Drusilla Tanzi</head>
+      <date when="1933-08">agosto 1933</date>
+      <p>Montale soggiorna a Londra insieme a Drusilla Tanzi (Mosca), di cui Irma ancora non conosce l'esistenza.</p>
+    </event>
+
+    <event type="Documenti">
+      <head>Lettera a Bigongiari</head>
+      <date when="1933">1933</date>
+      <p>Irma descrive Montale: «molto gentile, davvero semplice, alquanto brutto». Confessa di trovare meravigliosa la sua poesia.</p>
+    </event>
+
+    <event type="Biografico">
+      <head>Irma lascia l'Italia per le leggi razziali</head>
+      <date when="1938">1938</date>
+      <p>Le leggi razziali rendono impossibile la permanenza di Irma come studiosa ebrea americana.</p>
+    </event>
+
+    <event type="Letterario">
+      <head>Pubblicazione de Le Occasioni</head>
+      <date when="1939">1939</date>
+      <p>Montale pubblica Le Occasioni, dedicata a Irma trasfigurata col nome di Clizia.</p>
+    </event>
+
+    <event type="Letterario">
+      <head>Irma pubblica The Ladder of Vision</head>
+      <date when="1960">1960</date>
+      <p>Culmine degli anni di studi danteschi, il volume analizza l'imagery nella Commedia.</p>
+    </event>
+
+    <event type="biografico">
+      <head>Morte di Drusilla Tanzi</head>
+      <date when="1963">1963</date>
+      <p>Muore Drusilla Tanzi, compagna e poi moglie di Montale, trasfigurata come Xenia in Satura.</p>
+    </event>
+
+    <event type="Accademico">
+      <head>Montale cita The Ladder of Vision</head>
+      <date when="1965">1965</date>
+      <p>Montale menziona l'opera di Irma, definendola «quanto di più suggestivo» avesse letto sull'argomento.</p>
+    </event>
+
+    <event type="Letterario">
+      <head>Montale pubblica Satura</head>
+      <date when="1971">1971</date>
+      <p>Montale dedica la raccolta a Drusilla Tanzi. Irma osserva nelle annotazioni: «Xenia ottiene ciò che desidera: incolpandomi...»</p>
+    </event>
+
+    <event type="Accademico">
+      <head>Montale: Premio Nobel per la letteratura</head>
+      <date when="1975">1975</date>
+      <p>Riconoscimento del suo ruolo centrale nella poesia italiana del Novecento.</p>
+    </event>
+
+    <event type="Documenti">
+      <head>Annotazioni sul nome Clizia</head>
+      <date when="1980">1980</date>
+      <p>Irma, anziana, rifiuta l'identificazione con il personaggio poetico e rivendica la propria soggettività autonoma.</p>
+    </event>
+
+    <event type="Documenti">
+      <head>Ultimo biglietto di Montale</head>
+      <date when="1981">1981</date>
+      <p>Montale scrive: «Irma, sei ancora la mia dea, la mia divinità. Quando, come ci rincontreremo?»</p>
+    </event>
+
+    <event type="Biografico">
+      <head>Morte di Eugenio Montale</head>
+      <date when="1981-09-12">12 settembre 1981</date>
+      <p>«Montale è morto.» Irma riceve la notizia mentre pianificava un viaggio in Italia per rivederlo.</p>
+    </event>
+
+    <event type="Biografico">
+      <head>Morte di Irma Brandeis</head>
+      <date when="1990">1990</date>
+      <p>Irma Brandeis muore ad Annandale-on-Hudson, dove aveva insegnato per decenni al Bard College.</p>
+    </event>
+</listEvent>`;
+
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlString, 'application/xml');
+    const events = [...xml.querySelectorAll('event')];
+
+    const timeline = document.getElementById('timeline');
+
+    events.forEach((event, index) => {
+      const type = event.getAttribute('type');
+      const title = event.querySelector('head')?.textContent || '';
+      const date = event.querySelector('date')?.textContent || '';
+      const text = event.querySelector('p')?.textContent || '';
+
+      const side = index % 2 === 0 ? 'left' : 'right';
+
+      const item = document.createElement('div');
+      item.className = `timeline-item ${side}`;
+
+      item.innerHTML = `
+        <div class="timeline-dot"></div>
+        <div class="card ${type}">
+          <div class="date">${date}</div>
+          <div class="type-label">${type}</div>
+          <div class="title">${title}</div>
+          <p class="leading-relaxed text-gray-700">${text}</p>
+        </div>
+      `;
+
+      timeline.appendChild(item);
+    });
+  </script>
 
 </body>
 </html>
