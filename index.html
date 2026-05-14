@@ -461,12 +461,12 @@ const events = [
   {
     type: "Biografico",
     head: "Nascita di Irma Brandeis",
-    date: "1905",
+    date: "3 febbraio 1905",
     year: 1905,
     body: "Irma Brandeis nasce a New York da una famiglia ebraica di origine austro-boema.",
     tei: `<event type="Biografico">
   <head>Nascita di Irma Brandeis</head>
-  <date when="1905">1905</date>
+  <date when="1905-02-03">3 febbraio 1905</date>
   <p>
     <persName ref="#brandeis">Irma Brandeis</persName>
     nasce a <placeName ref="#ny">New York</placeName>
@@ -476,13 +476,13 @@ const events = [
   },
   {
     type: "Letterario",
-    head: "Pubblicazione degli Ossi di seppia",
-    date: "15 giugno 1925",
+    head: "Ossi di seppia",
+    date: "1925",
     year: 1925,
     body: "Prima raccolta poetica di Montale, pubblicata da Gobetti. È il libro che Brandeis cita come ragione del suo avvicinamento al poeta: «Ricordi che ha scritto il libro di poesie Ossi di seppia, che adoro».",
     tei: `<event type="Letterario">
-  <head>Pubblicazione degli Ossi di seppia</head>
-  <date when="1925-06-15">15 giugno 1925</date>
+  <head>Ossi di seppia</head>
+  <date when="1925">1925</date>
   <p>Prima raccolta poetica di
     <persName ref="#montale">Montale</persName>,
     pubblicata da Gobetti.
@@ -491,6 +491,28 @@ const events = [
     cita come ragione del suo avvicinamento al poeta:
     «Ricordi che ha scritto il libro di poesie
     Ossi di seppia, che adoro».
+  </p>
+</event>`
+  },
+  {
+    type: "Biografico",
+    head: "Primo soggiorno fiorentino di Irma Brandeis",
+    date: "1927",
+    year: 1927,
+    body: "Irma viene a Firenze per la prima volta con l'intenzione di scrivere un libro sui suoi studi danteschi, progetto che non si realizzerà in questa occasione, come lei stessa ricorda nella lettera del 20 luglio 1933: «il libro che intendevo scrivere quando sono venuta due anni fa in questa città».",
+    tei: `<event type="biografico">
+  <head>Primo soggiorno fiorentino di Irma Brandeis</head>
+  <date when="1927">1927</date>
+  <p>
+    <persName ref="#brandeis">Irma</persName>
+    viene a <placeName ref="#fi">Firenze</placeName>
+    per la prima volta con l'intenzione di scrivere
+    un libro sui suoi studi danteschi, progetto che
+    non si realizzerà in questa occasione,
+    come lei stessa ricorda nella lettera del
+    20 luglio 1933:
+    «il libro che intendevo scrivere quando sono
+    venuta due anni fa in questa città».
   </p>
 </event>`
   },
@@ -513,28 +535,6 @@ const events = [
     ruolo che manterrà fino al 1938,
     quando verrà destituito per non aver aderito
     al Partito Fascista.
-  </p>
-</event>`
-  },
-  {
-    type: "Biografico",
-    head: "Primo soggiorno fiorentino di Irma Brandeis",
-    date: "1931",
-    year: 1931,
-    body: "Irma viene a Firenze per la prima volta con l'intenzione di scrivere un libro sui suoi studi danteschi, progetto che non si realizzerà in questa occasione, come lei stessa ricorda nella lettera del 20 luglio 1933: «il libro che intendevo scrivere quando sono venuta due anni fa in questa città».",
-    tei: `<event type="biografico">
-  <head>Primo soggiorno fiorentino di Irma Brandeis</head>
-  <date when="1931">1931</date>
-  <p>
-    <persName ref="#brandeis">Irma</persName>
-    viene a <placeName ref="#fi">Firenze</placeName>
-    per la prima volta con l'intenzione di scrivere
-    un libro sui suoi studi danteschi, progetto che
-    non si realizzerà in questa occasione,
-    come lei stessa ricorda nella lettera del
-    20 luglio 1933:
-    «il libro che intendevo scrivere quando sono
-    venuta due anni fa in questa città».
   </p>
 </event>`
   },
@@ -618,12 +618,12 @@ const events = [
   {
     type: "Documenti",
     head: "Lettera a Gino Bigongiari",
-    date: "1933",
+    date: "2 agosto 1933",
     year: 1933,
     body: "Irma descrive Montale: «molto gentile, davvero semplice, alquanto brutto». Confessa di trovare meravigliosa la sua poesia e di tornare sempre a casa a rileggere il suo libro.",
     tei: `<event type="Documenti">
   <head>Lettera a Gino Bigongiari</head>
-  <date when="1933">1933</date>
+  <date when="1933-08-02">2 agosto 1933</date>
   <p>
     <persName ref="#brandeis">Irma</persName>
     descrive
@@ -655,12 +655,12 @@ const events = [
   },
   {
     type: "Letterario",
-    head: "Pubblicazione de Le Occasioni",
+    head: "Le Occasioni",
     date: "1939",
     year: 1939,
     body: "Montale pubblica Le Occasioni, dedicata a Irma trasfigurata col nome di Clizia — figura della tradizione ovidiana, il girasole che volge lo sguardo verso il sole divino, simbolo di fedeltà assoluta in un'epoca di buio storico. È il culmine poetico del loro legame.",
     tei: `<event type="Letterario">
-  <head>Pubblicazione de Le Occasioni</head>
+  <head>Le Occasioni</head>
   <date when="1939">1939</date>
   <p>
     <persName ref="#montale">Montale</persName>
@@ -678,12 +678,30 @@ const events = [
   },
   {
     type: "Letterario",
-    head: "Irma pubblica The Ladder of Vision",
+    head: "La bufera e altro",
+    date: "1956",
+    year: 1956,
+    body: "Montale pubblica La bufera e altro nel 1956. La raccolta affronta guerra, crisi storica e tensione spirituale, ritorna la figura di Clizia come simbolo di salvezza morale.",
+    tei: `<event type="Letterario">
+  <head>La bufera e altro</head>
+  <date when="1956">1956</date>
+  <p>
+    <persName ref="#montale">Montale</persName>
+  pubblica La bufera e altro nel 1956. 
+  La raccolta affronta guerra, crisi storica e tensione spirituale, 
+  ritorna la figura di <persName ref="#brandeis">Clizia</persName>
+   come simbolo di salvezza morale.
+  </p>
+</event>`
+  },
+  {
+    type: "Letterario",
+    head: "The Ladder of Vision",
     date: "1960",
     year: 1960,
     body: "Culmine degli anni di studi danteschi, il volume analizza l'imagery nella Commedia. Brandeis era ritirata al Bard College di Annandale-on-Hudson, dove continuò a costruire la propria voce critica e intellettuale.",
     tei: `<event type="Letterario">
-  <head>Irma pubblica The Ladder of Vision</head>
+  <head>The Ladder of Vision</head>
   <date when="1960">1960</date>
   <p>Culmine degli anni di studi danteschi,
     il volume analizza l'imagery nella Commedia.
@@ -697,12 +715,12 @@ const events = [
   {
     type: "Biografico",
     head: "Morte di Drusilla Tanzi",
-    date: "1963",
+    date: "20 ottobre 1963",
     year: 1963,
     body: "Muore Drusilla Tanzi, compagna e poi moglie di Montale, trasfigurata poeticamente col nome di Xenia nella raccolta Satura (1971).",
     tei: `<event type="biografico">
   <head>Morte di Drusilla Tanzi</head>
-  <date when="1963">1963</date>
+  <date when="1963-10-20">20 ottobre 1963</date>
   <p>Muore
     <persName ref="#tanzi">Drusilla Tanzi</persName>,
     compagna e poi moglie di
@@ -736,12 +754,12 @@ const events = [
   },
   {
     type: "Letterario",
-    head: "Montale pubblica Satura",
+    head: "Satura",
     date: "1971",
     year: 1971,
     body: "Montale dedica la raccolta a Drusilla Tanzi, trasfigurata col nome di Xenia. Irma nelle annotazioni del 1980 osserva: «Xenia ottiene ciò che desidera: incolpandomi, insultandomi, riconquistando favore».",
     tei: `<event type="Letterario">
-  <head>Montale pubblica Satura</head>
+  <head>Satura</head>
   <date when="1971">1971</date>
   <p>
     <persName ref="#montale">Montale</persName>
@@ -753,6 +771,21 @@ const events = [
     nelle annotazioni del 1980 osserva:
     «Xenia ottiene ciò che desidera:
     incolpandomi, insultandomi, riconquistando favore».
+  </p>
+</event>`
+  },
+  {
+    type: "Letterario",
+    head: "Diario del ’71 e del ’72",
+    date: "1973",
+    year: 1973,
+    body: "Montale pubblica Diario del ’71 e del ’72 nel 1973. Raccolta di poesie brevi e meditate, caratterizzate da tono colloquiale e osservazioni disincantate sulla vecchiaia e sul tempo.",
+    tei: `<event type="Letterario">
+  <head>Diario del ’71 e del ’72</head>
+  <date when="1973">1973</date>
+  <p>
+    <persName ref="#montale">Montale</persName>
+    pubblica Diario del ’71 e del ’72 nel 1973. Raccolta di poesie brevi e meditate, caratterizzate da tono colloquiale e osservazioni disincantate sulla vecchiaia e sul tempo.
   </p>
 </event>`
   },
@@ -770,6 +803,21 @@ const events = [
     riceve il Premio Nobel per la letteratura,
     riconoscimento del suo ruolo centrale nella
     poesia italiana del Novecento.
+  </p>
+</event>`
+  },
+   {
+    type: "Letterario",
+    head: "Quaderno di quattro anni",
+    date: "1977",
+    year: 1977,
+    body: "Montale pubblica Quaderno di quattro anni nel 1977. Prosegue la linea ironica e riflessiva dell’ultima produzione, con testi che mostrano frammentazione, memoria e crisi dei valori moderni.",
+    tei: `<event type="Letterario">
+  <head>Quaderno di quattro anni</head>
+  <date when="1977">1977</date>
+  <p>
+    <persName ref="#montale">Montale</persName>
+    pubblica Quaderno di quattro anni nel 1977. Prosegue la linea ironica e riflessiva dell’ultima produzione, con testi che mostrano frammentazione, memoria e crisi dei valori moderni.
   </p>
 </event>`
   },
@@ -796,12 +844,12 @@ const events = [
   {
     type: "Documenti",
     head: "Ultimo biglietto di Montale",
-    date: "1981",
+    date: "giugno 1981",
     year: 1981,
     body: "Montale le spedisce una copia della sua Opera in versi con un biglietto: «Irma, sei ancora la mia dea, la mia divinità. Quando, come ci rincontreremo?» Irma stava pianificando un viaggio in Italia per rivederlo.",
     tei: `<event type="Documenti">
   <head>Ultimo biglietto di Montale</head>
-  <date when="1981">1981</date>
+  <date when="1981-06"> giugno 1981</date>
   <p>
     <persName ref="#montale">Montale</persName>
     le spedisce una copia della sua Opera in versi
@@ -837,12 +885,12 @@ const events = [
   {
     type: "Biografico",
     head: "Morte di Irma Brandeis",
-    date: "1990",
+    date: "29 gennaio 1990",
     year: 1990,
     body: "Irma Brandeis muore nel 1990 ad Annandale-on-Hudson, dove aveva insegnato per decenni al Bard College.",
     tei: `<event type="Biografico">
   <head>Morte di Irma Brandeis</head>
-  <date when="1990">1990</date>
+  <date when="1990-01-29">29 gennaio 1990</date>
   <p>
     <persName ref="#brandeis">Irma Brandeis</persName>
     muore nel 1990 ad Annandale-on-Hudson,
